@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Makale Detayı</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+ body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;background:#f4f4f4;color:#333;line-height:1.7}
+ header{background:#003366;color:#f9f9f9;padding:1.2rem 1rem;text-align:center;position:sticky;top:0;z-index:999}
+ nav{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-top:.5rem}
+ nav a{color:#fff;text-decoration:none;font-weight:600;font-size:.9rem}
+ nav a:hover{text-decoration:underline}
+ article{max-width:700px;margin:2rem auto;background:#fff;padding:1.5rem;border-radius:6px}
+ h1{color:#003366;margin-bottom:.5rem}
+ small{color:#666}
+ article img{width:100%;border-radius:4px;margin-bottom:1rem}
+ .back{margin-top:1rem;display:inline-block;background:#003366;color:#fff;padding:.5rem 1rem;border-radius:4px;text-decoration:none}
+</style>
+</head>
+<body>
+
+<header>
+ <h1 id="title">Yükleniyor…</h1>
+ <nav>
+  <a href="index.html#anasayfa">Ana Sayfa</a>
+  <a href="index.html#egitim">Finans Eğitimi</a>
+  <a href="index.html#borsa">Borsa Eğitimi</a>
+  <a href="index.html#analiz">Teknik Analiz</a>
+  <a href="index.html#temel">Temel Analiz</a>
+  <a href="index.html#kripto">Kripto Analizi</a>
+ </nav>
+ <small id="meta"></small>
+</header>
+
+<article>
+ <img id="banner" style="display:none">
+ <div id="body">Yükleniyor…</div>
+ <a class="back" href="index.html">← Ana Sayfaya Dön</a>
+</article>
+
+<script src="data.js"></script>
+<script>
+const params=new URLSearchParams(location.search);
+const id=params.get('id');
+const post=posts.find(p=>p.id==id);
+if(!post){
+ document.body.innerHTML='<h1 style="text-align:center;margin-top:3rem">Makale bulunamadı</h1>';
+}else{
+ document.title=post.title;
+ document.getElementById('title').textContent=post.title;
+ document.getElementById('meta').textContent=`${post.date} | ${post.cat}`;
+ if(post.img){
+   const banner=document.getElementById('banner');
+   banner.src=post.img;
+   banner.style.display='block';
+ }
+ document.getElementById('body').innerHTML=post.body.replace(/\n/g,'<br>');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Finans & Borsa Egitim</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+ :root{--c1:#003366;--c2:#f4f4f4}
+ *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif}
+ body{background:var(--c2);color:#333;line-height:1.6}
+ header{background:var(--c1);color:#fff;padding:1.2rem 1rem;text-align:center;position:sticky;top:0;z-index:999}
+ nav{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-top:.5rem}
+ nav a{color:#fff;text-decoration:none;font-weight:600;font-size:.9rem}
+ nav a:hover{text-decoration:underline}
+ main{max-width:1000px;margin:2rem auto;padding:0 1rem}
+ section{margin-bottom:2rem}
+ h2{color:var(--c1);margin-bottom:.5rem}
+ .posts{display:grid;gap:1.2rem}
+ .card{background:#fff;border-radius:6px;padding:1rem;box-shadow:0 2px 4px rgba(0,0,0,.08)}
+ .card img{width:100%;border-radius:4px;margin-bottom:.5rem}
+ .card h3{margin-bottom:.4rem;font-size:1.1rem}
+ .card p{font-size:.9rem;color:#555;margin-bottom:.5rem}
+ .card a{display:inline-block;background:var(--c1);color:#fff;padding:.3rem .7rem;border-radius:4px;font-size:.8rem;text-decoration:none}
+ .card small{color:#888}
+ footer{background:var(--c1);color:#fff;text-align:center;padding:1rem;margin-top:2rem;font-size:.8rem}
+ #sortCtrl{display:flex;align-items:center;gap:.5rem;margin-bottom:1rem}
+ #sortCtrl label{font-size:.9rem}
+ @media(min-width:600px){.posts{grid-template-columns:repeat(2,1fr)}}
+ @media(min-width:900px){.posts{grid-template-columns:repeat(3,1fr)}}
+</style>
+</head>
+<body>
+
+<header>
+ <h1>Finans & Borsa Egitim</h1>
+ <nav>
+  <a href="#">Anasayfa</a>
+  <a href="#egitim">Finans Eğitimi</a>
+  <a href="#borsa">Borsa Eğitimi</a>
+  <a href="#analiz">Teknik Analiz</a>
+  <a href="#temel">Temel Analiz</a>
+  <a href="#kripto">Kripto Analizi</a>
+ </nav>
+</header>
+
+<main>
+ <section id="anasayfa">
+   <div id="sortCtrl">
+     <label for="sortOrder">Sıralama:</label>
+     <select id="sortOrder">
+       <option value="desc">Yeniden Eskiye</option>
+       <option value="asc">Eskiden Yeniye</option>
+     </select>
+   </div>
+   <div id="posts" class="posts">Yükleniyor…</div>
+ </section>
+
+ <!-- TradingView widget (sadece analiz sayfasında) -->
+ <section id="analizSec" style="display:none;">
+  <!-- TradingView Widget BEGIN -->
+<div class="tradingview-widget-container">
+  <div class="tradingview-widget-container__widget"></div>
+ <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+  {
+  "allow_symbol_change": true,
+  "calendar": false,
+  "details": false,
+  "hide_side_toolbar": true,
+  "hide_top_toolbar": false,
+  "hide_legend": false,
+  "hide_volume": false,
+  "hotlist": false,
+  "interval": "240",
+  "locale": "tr",
+  "save_image": true,
+  "style": "1",
+  "symbol": "BINANCE:BTCUSDT",
+  "theme": "light",
+  "timezone": "Europe/Istanbul",
+  "backgroundColor": "#ffffff",
+  "gridColor": "rgba(46, 46, 46, 0.06)",
+  "watchlist": [],
+  "withdateranges": false,
+  "compareSymbols": [],
+  "studies": [],
+  "width": 980,
+  "height": 610
+}
+  </script>
+</div>
+<!-- TradingView Widget END -->
+ </section>
+</main>
+
+<footer>© 2025 - Tüm hakları saklıdır (finans ve borsa egitim)</footer>
+
+<script src="data.js"></script>
+<script>
+const container=document.getElementById('posts');
+const sortOrder=document.getElementById('sortOrder');
+const analizSec=document.getElementById('analizSec');
+
+function render(filter){
+ container.innerHTML='';
+ let list=posts.slice();
+ list.sort((a,b)=> sortOrder.value==='asc' ? a.id-b.id : b.id-a.id);
+ if(filter) list=list.filter(p=>p.cat===filter);
+ list.forEach(p=>{
+   const div=document.createElement('div');
+   div.className='card';
+   div.innerHTML=`
+     ${p.img?`<img src="${p.img}" alt="${p.title}">`:''}
+     <h3>${p.title}</h3>
+     <p>${p.summary}</p>
+     <a href="detail.html?id=${p.id}">Devamını oku</a>
+     <br><small>${p.date} | ${p.cat}</small>`;
+   container.appendChild(div);
+ });
+ analizSec.style.display=(filter==='analiz')?'block':'none';
+}
+function route(){
+ const hash=location.hash.slice(1);
+ render(hash||null);
+}
+sortOrder.addEventListener('change',route);
+window.addEventListener('hashchange',route);
+window.addEventListener('load',route);
+</script>
+</body>
+</html>
